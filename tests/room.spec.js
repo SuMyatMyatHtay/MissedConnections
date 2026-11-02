@@ -20,28 +20,30 @@ test('two attendees join by invitation, accept an introduction, and meet',async(
   const result=await admin.from('rooms').select('id,owner_id').eq('name',eventName).single();
   if(result.error)throw result.error;roomId=result.data.id;userIds.push(result.data.owner_id);
   await host.getByRole('button',{name:'Close dialog'}).click();
+  await expect(host.getByRole('heading',{name:'Your room is ready.'})).toBeVisible();
   async function introduce(page,name,offer,need){
    await page.getByLabel('Your name',{exact:true}).fill(name);
    await page.getByLabel('What are you building or exploring?').fill('An AI tutor for university students');
    await page.getByLabel('What would you love help with?').fill(need);
    await page.getByLabel('What can you help someone with?').fill(offer);
   }
-  await introduce(host,'QA Alice','React prototypes','Product design');
-  await host.getByRole('button',{name:'+ Frontend',exact:true}).first().click();
-  await host.getByRole('button',{name:'+ Design',exact:true}).last().click();
-  await host.getByRole('button',{name:'Find my people'}).click();
-  await expect(host.getByText('You’re first!',{exact:false})).toBeVisible();
   await guest.goto(url);await introduce(guest,'QA Bob','Product design','React prototypes');
   await guest.getByRole('button',{name:'+ Design',exact:true}).first().click();
   await guest.getByRole('button',{name:'+ Frontend',exact:true}).last().click();
   await guest.getByRole('button',{name:'Find my people'}).click();
-  await expect(guest.getByText('QA Alice',{exact:true})).toBeVisible();
   await expect(host.getByText('QA Bob',{exact:true})).toBeVisible({timeout:15000});
+  await host.screenshot({path:'test-results/organizer-live.png',fullPage:true});
+  await host.getByRole('button',{name:'Join matching too'}).click();
+  await introduce(host,'QA Alice','React prototypes','Product design');
+  await host.getByRole('button',{name:'+ Frontend',exact:true}).first().click();
+  await host.getByRole('button',{name:'+ Design',exact:true}).last().click();
+  await host.getByRole('button',{name:'Find my people'}).click();
+  await expect(guest.getByText('QA Alice',{exact:true})).toBeVisible({timeout:15000});
   await expect(host.getByText('You can help each other',{exact:true})).toBeVisible();
   await host.getByRole('button',{name:'Let’s meet',exact:true}).click();
   await guest.getByRole('tab',{name:/Introductions/}).click();
   await guest.getByRole('button',{name:'Let’s meet',exact:true}).click();
-  await expect(guest.getByText('You’re both in! Meet at Registration desk.',{exact:true})).toBeVisible();
+  await expect(guest.getByRole('article').getByText('You’re both in! Meet at Registration desk.',{exact:true})).toBeVisible();
   await host.getByRole('tab',{name:/Introductions/}).click();
   await expect(host.getByRole('button',{name:'We met'})).toBeVisible();
   await host.getByRole('button',{name:'We met'}).click();

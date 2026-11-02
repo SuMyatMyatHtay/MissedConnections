@@ -27,16 +27,23 @@ export async function findRoom(code) {
 }
 export async function createRoom(form, userId) {
  if (!isLive) throw new Error('Connect Supabase to create a room for real attendees. You can explore the demo below.');
- return checked(await supabase.from('rooms').insert({...form, owner_id:userId}).select().single());
+ const id=crypto.randomUUID();
+ checked(await supabase.from('rooms').insert({id,...form,owner_id:userId}));
+ return checked(await supabase.from('rooms').select('*').eq('id',id).single());
 }
 export async function roomData(roomId) {
  if (!isLive) return {members:demoMembers, intros:[]};
  const [members,intros] = await Promise.all([supabase.from('room_members').select('*').eq('room_id',roomId),supabase.from('introductions').select('*').eq('room_id',roomId)]);
  return {members:checked(members),intros:checked(intros)};
 }
-export async function saveMember(roomId,userId,profile) {
+export async function saveMember(roomId,userId,profile,exists=false) {
  const row={room_id:roomId,user_id:userId,...profile};
- if (isLive) checked(await supabase.from('room_members').upsert(row));
+ if (isLive) {
+  const result=exists
+   ? await supabase.from('room_members').update(profile).eq('room_id',roomId).eq('user_id',userId)
+   : await supabase.from('room_members').insert(row);
+  checked(result);
+ }
  return row;
 }
 export async function sendIntro(roomId,sender,recipient) {
