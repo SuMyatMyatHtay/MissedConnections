@@ -1,0 +1,13 @@
+.header-right{display:flex;align-items:center;gap:14px}.header-right .who{font-size:11px;color:#7d7c91;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gate{max-width:1000px;margin:auto}.gate-title{font-size:clamp(34px,5vw,58px);letter-spacing:-2px}.gate-form{max-width:460px;margin-top:30px}.gate-form h2{margin:14px 0 6px}.gate .onboard{margin-top:10px}.gate .back{margin-top:10px}
+.text-btn.inline{display:inline;font-size:inherit}.auth-form{margin-top:12px}.auth-form label{display:block}
+.intent-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.intent-picker button{border:1px solid #e5e3ee;background:#fff;color:#797b91;border-radius:10px;font-size:12px;font-weight:700;padding:13px 8px}.intent-picker button.selected{background:#ede7fd;border-color:#b8a7ea;color:#7957c4}
+.tag-field .tag-picker{margin-bottom:9px}.tag-field input{width:100%}
+.intent-badge{display:inline-block;font-size:10px;font-weight:800;border-radius:20px;padding:5px 10px;background:#f2f2f8;color:#75768a}.intent-hiring{background:#e9f7f0;color:#26836b}.intent-job_seeking{background:#fff1e0;color:#b36a14}
+.match-card .intent-badge{margin:4px 0 10px}
+.organizer-member .chips{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}.organizer-member h3 .chip{margin-left:6px;vertical-align:middle}.organizer-member div>span svg{vertical-align:-1px}
+.person-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}.person-side .availability{margin-left:0}
+.connection .pair{display:flex}.connection .pair .avatar+.avatar{margin-left:-14px;border:3px solid #fff}.connection h3 .arrow{color:#9370de;margin:0 4px}
+.chip.status-accepted,.chip.status-met{background:#e9f7f0;color:#26836b}.chip.status-declined{background:#fdecef;color:#b3445a}.chip.status-pending{background:#fff1e0;color:#b36a14}
+.room-title-row+.room-tabs{margin-top:22px}
+@media(max-width:730px){.intent-picker{grid-template-columns:1fr}.header-right .who{display:none}.person-side{align-items:flex-start}}

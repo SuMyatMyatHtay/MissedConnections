@@ -1,6 +1,11 @@
 # MissedConnection
 
-Event rooms that help people find useful introductions. Organizers create a room and share a QR code. Attendees describe their project, needs, and offers, discover complementary people, and request a meeting. Accepted introductions show the room’s meeting point; either participant can confirm they met.
+Event rooms that help people at networking events find the right person to talk to first.
+
+- **Organizers need an account.** They create a room, share its QR code, and get an admin view: everyone who joined (email, company, role, intent, skills), who invited whom and how it ended, and a CSV export.
+- **Participants don't need one.** Scanning the QR code opens a gate: *Log in or sign up* (profile pre-filled next time) or *Continue as guest*. People looking for work provide their target role instead of a company/current role; other attendees can add their company and role.
+- **Matching** ranks the room by intent first (hiring and looking for work rank highest, scored on how well the job seeker's skills cover what the hirer is searching for), then complementary and shared skills. Related skills count (React and Frontend), people at your own company rank lower, and each match gets a plain-language reason and a tailored icebreaker.
+- Accepted introductions show the meeting point and reveal each side's email; either participant can confirm they met.
 
 ## Local development
 
@@ -13,8 +18,8 @@ Without Supabase credentials, use **Explore local demo**. Demo attendees are fic
 
 ## Supabase setup
 
-1. Run `supabase/rooms.sql` in the Supabase SQL Editor. It is rerunnable and leaves the original `attendees` table intact.
-2. Enable **Allow anonymous sign-ins** under Authentication → Sign In / Providers and save. This lets each browser join without email.
+1. Run `supabase/rooms.sql` in the Supabase SQL Editor. It is rerunnable, upgrades an existing project in place, and leaves the original `attendees` table intact.
+2. Under Authentication → Sign In / Providers, keep **Email** enabled (organizer and participant accounts) and enable **Allow anonymous sign-ins** (guest mode). For quick testing, turn off **Confirm email**; otherwise new accounts must confirm their email before logging in.
 3. Set the browser-safe values in `.env`:
 
 ```dotenv
@@ -25,7 +30,7 @@ VITE_ENABLE_SEMANTIC_MATCHING=false
 
 4. Restart the dev server. Create a room, introduce yourself, and open its invitation in an incognito browser to test a second participant.
 
-Anonymous sessions belong to a browser. Clearing its data or changing devices loses access to that identity. Room codes act as invitations; only share them with intended participants. Participants explicitly consent to discovery and can hide their profile or mark themselves unavailable. Only introduction participants and the room owner can read introductions; the organizer can see room metrics and profiles for their room.
+Guest sessions belong to a browser. Clearing its data or changing devices loses access to that guest identity; accounts work on any device. Only non-anonymous accounts can create rooms (enforced by row-level security, not just the UI). Emails live in `member_contacts`, readable only by their owner, the room organizer, and the other side of an accepted introduction. Room codes act as invitations; only share them with intended participants. Participants explicitly consent to discovery and can hide their profile or mark themselves unavailable. Only introduction participants and the room owner can read introductions; the organizer can see room metrics and profiles for their room.
 
 Before a large event, review Supabase Auth’s anonymous sign-in rate limit: many attendees may share the venue’s public IP. Enable appropriate CAPTCHA protection before broader public promotion.
 
@@ -54,16 +59,16 @@ npm run build
 node scripts/verify-bundle.mjs
 ```
 
-The browser test uses two isolated sessions, including a mobile viewport. It creates a temporary room, checks live arrival, sends and accepts an invitation, confirms the meeting, and removes its own test records. Cleanup requires `SUPABASE_SERVICE_ROLE_KEY` in local `.env`. It must never be shipped to browsers. Screenshots are saved in ignored `test-results/`.
+The browser test uses two isolated sessions, including a mobile viewport. It creates a temporary organizer account, hosts a room, joins a guest through the QR gate, checks hiring and job-seeker matching, sends and accepts an invitation, confirms the meeting and the organizer's connection view, then removes its own records and users. Cleanup requires `SUPABASE_SERVICE_ROLE_KEY` in local `.env`. It must never be shipped to browsers. Screenshots are saved in ignored `test-results/`.
 
 ## Event launch
 
-Deploy the `dist/` directory to public HTTPS hosting. Environment variables are compiled into this Vite build: changing a frontend setting requires rebuilding. Anonymous login does not need an email redirect URL.
+Deploy the `dist/` directory to public HTTPS hosting. Environment variables are compiled into this Vite build: changing a frontend setting requires rebuilding. If email confirmation is on, set the Auth Site URL to the deployed address.
 
 1. Create a real event room on the **deployed URL**.
-2. Enter a recognizable meeting point and create your own profile.
-3. Display the room’s QR code. It uses the current website’s origin, so use the public deployment rather than localhost.
+2. Enter a recognizable meeting point. Use **Join matching too** if you also want matches.
+3. Display the room’s QR code (organizers log in first). It uses the current website’s origin, so use the public deployment rather than localhost.
 4. Test with one real phone before inviting the room.
-5. Keep the organizer’s browser session to retain ownership.
+5. Log in on any device to get back to your organizer view.
 
-Profiles and invitations are stored in Supabase; no email, phone number, external event link, or contact details are collected. This is an event MVP: it does not include account recovery, push notifications while the browser is closed, or verified physical attendance.
+Profiles and invitations are stored in Supabase; emails are collected, phone numbers are not. This is an event MVP: it does not include push notifications while the browser is closed, verified physical attendance, or upgrading a guest to an account.
