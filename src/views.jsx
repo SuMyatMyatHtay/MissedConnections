@@ -22,16 +22,7 @@ import { categories, moreSkills } from "./demo";
 import { intents, intentLabel } from "./match";
 
 export function Avatar({ person }) {
-  return (
-    <div className="avatar avatar-large">
-      {(person?.name || "?")
-        .split(" ")
-        .map((s) => s[0])
-        .slice(0, 2)
-        .join("")
-        .toUpperCase()}
-    </div>
-  );
+  return <PixelAvatar person={person} compact />;
 }
 function avatarIndex(person) {
   const key = person?.user_id || person?.name || "guest";
@@ -40,13 +31,13 @@ function avatarIndex(person) {
     hash = ((hash << 5) - hash + key.charCodeAt(i)) | 0;
   return Math.abs(hash) % 49;
 }
-function PixelAvatar({ person }) {
+function PixelAvatar({ person, compact = false }) {
   const index = avatarIndex(person),
     column = index % 7,
     row = Math.floor(index / 7);
   return (
     <div
-      className="pixel-avatar"
+      className={`pixel-avatar${compact ? " pixel-avatar-compact avatar avatar-large" : ""}`}
       aria-hidden="true"
       style={{
         "--avatar-x": `${(column * 100) / 6}%`,

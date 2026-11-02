@@ -531,7 +531,7 @@ export default function App() {
       )
     : null;
   return (
-    <div className="room-app">
+    <div className={"room-app" + (room ? "" : " is-landing")}>
       <header className="room-header">
         <button className="wordmark" onClick={leave}>
           <span className="brand-icon">
@@ -1023,6 +1023,13 @@ export default function App() {
               good at. We’ll tell you who to say hello to first, and what to
               say.
             </p>
+            <div className="sticker-row" aria-hidden="true">
+              <span className="sticker s1">★ Hiring · React</span>
+              <span className="sticker s2">92% match</span>
+              <span className="sticker s3">✦ Open to work</span>
+              <span className="sticker s4">“Hi! Loved your demo.”</span>
+              <span className="sticker s5">Say hello first</span>
+            </div>
             <div className="entry-grid">
               <section className="entry-card">
                 <div className="stat-ico purple">

@@ -1,0 +1,31 @@
+/* Landing page: loud pixel-arcade green. Imported last so it wins over pixel-ui.css. */
+.room-app.is-landing{position:relative;overflow:hidden;color:#0a2e1f;background:radial-gradient(circle at 6% 4%,#d4ff5e 0,transparent 28%),radial-gradient(circle at 96% 8%,#ff9ad5 0,transparent 26%),radial-gradient(circle at 90% 88%,#8be9ff 0,transparent 28%),radial-gradient(circle at 4% 92%,#ffe14d 0,transparent 22%),linear-gradient(160deg,#3ddc84,#1fb86a 55%,#12a35c)}
+/* Pixel confetti: one square, many colored box-shadow copies. */
+.room-app.is-landing:before{content:"";position:absolute;left:0;top:0;width:14px;height:14px;background:#fff35c;pointer-events:none;image-rendering:pixelated;animation:landingPixels 3s steps(2,end) infinite alternate;box-shadow:12vw 18vh 0 #ff4fa8,24vw 9vh 0 #fff,38vw 24vh 0 #8be9ff,52vw 6vh 0 #c6ff4d,66vw 20vh 0 #ff9ad5,78vw 11vh 0 #fff35c,91vw 28vh 0 #fff,8vw 44vh 0 #8be9ff,95vw 52vh 0 #ff4fa8,4vw 70vh 0 #fff,17vw 86vh 0 #ff9ad5,43vw 92vh 0 #fff35c,61vw 80vh 0 #8be9ff,82vw 74vh 0 #c6ff4d,93vw 90vh 0 #fff,31vw 60vh 0 #ff4fa8}
+@keyframes landingPixels{from{transform:translateY(0)}to{transform:translateY(10px)}}
+.is-landing>*{position:relative;z-index:1}
+.is-landing .room-header{background:transparent;border-bottom:0;box-shadow:none}
+.is-landing .wordmark,.is-landing .wordmark>span{color:#0a2e1f}.is-landing .wordmark>b{color:#fff35c;text-shadow:2px 2px 0 #0a2e1f}
+.is-landing .wordmark .brand-icon{background:#0a2e1f;color:#c6ff4d;box-shadow:3px 3px 0 #fff35c}
+.is-landing .mode,.is-landing .header-right .who{background:#fff;color:#0a2e1f;border:2px solid #0a2e1f;border-radius:6px;box-shadow:3px 3px 0 #0a2e1f}.is-landing .header-right .who{padding:6px 10px}
+.is-landing .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#0a2e1f;border:2px solid #0a2e1f;border-radius:6px;padding:8px 14px;box-shadow:4px 4px 0 #0a2e1f;font-weight:800}.is-landing .eyebrow .dot{background:#ff4fa8;border-radius:0}
+.is-landing .landing-title{color:#0a2e1f;letter-spacing:-3px;text-shadow:4px 4px 0 #ffffff80}
+.is-landing .landing-title em{display:inline-block;background:#fff35c;border:3px solid #0a2e1f;border-radius:8px;padding:0 .14em;color:#0a2e1f;text-shadow:none;transform:rotate(-1.5deg);box-shadow:6px 6px 0 #0a2e1f;margin-top:8px}
+.is-landing .landing-description{color:#0a2e1f;font-weight:600}
+.sticker-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.sticker{border:2px solid #0a2e1f;border-radius:6px;padding:9px 14px;font-weight:800;font-size:13px;box-shadow:4px 4px 0 #0a2e1f;color:#0a2e1f;animation:stickerBob 2.4s steps(3,end) infinite alternate}
+.s1{background:#fff35c;transform:rotate(-3deg)}.s2{background:#ff9ad5;transform:rotate(2deg);animation-delay:-.5s}.s3{background:#8be9ff;transform:rotate(-1deg);animation-delay:-1s}.s4{background:#fff;transform:rotate(2.5deg);font-style:italic;animation-delay:-1.5s}.s5{background:#c6ff4d;transform:rotate(-2deg);animation-delay:-2s}
+@keyframes stickerBob{from{translate:0 0}to{translate:0 -5px}}
+.is-landing .entry-card{background:#fff;border:3px solid #0a2e1f!important;border-radius:8px!important;box-shadow:7px 7px 0 #0a2e1f!important}
+.is-landing .entry-card:before{background:#ff4fa8;box-shadow:none;width:10px;height:10px;top:-3px;left:-3px}
+.is-landing .entry-card:hover{transform:translate(-3px,-5px);box-shadow:10px 12px 0 #0a2e1f!important}
+.is-landing .entry-card:first-child{background:#f2ffd1}.is-landing .organizer-card{background:#e6dcff}
+.is-landing .entry-card h2,.is-landing .entry-card label{color:#0a2e1f}.is-landing .entry-card p{color:#3d5a4c}
+.is-landing .stat-ico{border:2px solid #0a2e1f;background:#fff35c;color:#0a2e1f;box-shadow:3px 3px 0 #0a2e1f}.is-landing .stat-ico.mint{background:#ff9ad5}.is-landing .stat-ico.purple{background:#8be9ff}
+.is-landing .entry-card .primary{background:#0a2e1f;color:#c6ff4d;border:2px solid #0a2e1f!important;box-shadow:4px 4px 0 #ff4fa8!important;font-weight:800}.is-landing .entry-card .primary:hover{box-shadow:6px 6px 0 #ff4fa8!important}
+.is-landing .join-input input{border:2px solid #0a2e1f;background:#fff;color:#0a2e1f;border-radius:6px}
+.is-landing .landing-footer,.is-landing .landing-footer .text-btn,.is-landing .text-btn{color:#0a2e1f;font-weight:800}
+.is-landing .onboard,.is-landing .gate-form{border:3px solid #0a2e1f!important;box-shadow:7px 7px 0 #0a2e1f!important}
+.is-landing .notice{border:2px solid #0a2e1f}
+@media(max-width:730px){.is-landing .landing-title{letter-spacing:-2px}.sticker{font-size:12px;padding:7px 11px}}
+@media(prefers-reduced-motion:reduce){.room-app.is-landing:before,.sticker{animation:none}}
