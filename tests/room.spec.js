@@ -54,6 +54,13 @@ test("organizer account hosts; a guest joins, matches on hiring intent, and the 
     await host.getByLabel("Email").fill(hostEmail);
     await host.getByLabel("Password").fill(password);
     await host.getByRole("button", { name: "Log in", exact: true }).click();
+    await expect(
+      host.getByRole("heading", { name: "Create your event room." }),
+    ).toBeVisible();
+    await host.screenshot({
+      path: "test-results/create-room-page.png",
+      fullPage: true,
+    });
     const eventName = `QA room ${Date.now()}`;
     await host.getByLabel("Event name", { exact: true }).fill(eventName);
     await host

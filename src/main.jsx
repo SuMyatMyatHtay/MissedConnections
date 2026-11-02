@@ -8,6 +8,8 @@ import "./admin-mode.css";
 import "./inbox.css";
 import "./flow.css";
 import "./pixel-ui.css";
+import "./auth-page.css";
+import "./create-room.css";
 import "./landing.css";
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>

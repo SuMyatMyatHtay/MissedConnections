@@ -17,6 +17,7 @@ import {
   Bell,
   MessageCircle,
   UserPlus,
+  MapPin,
 } from "lucide-react";
 import { categories, moreSkills } from "./demo";
 import { intents, intentLabel } from "./match";
@@ -159,6 +160,199 @@ export function AuthForm({ onSubmit, busy, initialMode = "login" }) {
         </button>
       </p>
     </form>
+  );
+}
+
+export function HostAuthPage({ onSubmit, onBack, busy, error }) {
+  const previewPeople = [
+    { user_id: "host-preview-1", name: "Sera" },
+    { user_id: "host-preview-2", name: "John" },
+    { user_id: "host-preview-3", name: "Miya" },
+  ];
+  return (
+    <main className="host-auth-page">
+      <section className="host-auth-story">
+        <button className="auth-wordmark" onClick={onBack}>
+          <span className="brand-icon">
+            <Radio size={21} />
+          </span>
+          missed<span>connection</span>
+          <b>.</b>
+        </button>
+        <div className="auth-story-copy">
+          <div className="stage-kicker">
+            <span className="live-pulse" /> ORGANIZER ACCESS
+          </div>
+          <h1>Bring the right people into the same room.</h1>
+          <p>
+            Create your event, share one QR code, and watch useful conversations
+            form live.
+          </p>
+          <div className="auth-pixel-scene">
+            {previewPeople.map((person, index) => (
+              <div
+                className={`auth-person auth-person-${index + 1}`}
+                key={person.user_id}
+              >
+                <span>{person.name}</span>
+                <PixelAvatar person={person} />
+              </div>
+            ))}
+            <div className="auth-connection-line line-one" />
+            <div className="auth-connection-line line-two" />
+          </div>
+        </div>
+        <p className="auth-proof">
+          <Sparkles size={15} /> Powered by Supabase Realtime and pgvector
+        </p>
+      </section>
+      <section className="host-auth-panel">
+        <button className="auth-back" onClick={onBack}>
+          <ArrowLeft size={16} /> Back to event rooms
+        </button>
+        <div className="host-auth-form-wrap">
+          <div className="dialog-eyebrow">ORGANIZER ACCOUNT</div>
+          <h2>Welcome back.</h2>
+          <p>Log in to create a room and manage your live event.</p>
+          {error && <div className="notice error">{error}</div>}
+          <AuthForm onSubmit={onSubmit} busy={busy} />
+          <div className="auth-trust-row">
+            <span>Private rooms</span>
+            <span>Live attendance</span>
+            <span>Secure access</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+export function HostCreatePage({
+  draft,
+  onChange,
+  onSubmit,
+  onBack,
+  busy,
+  email,
+}) {
+  const previewPeople = [
+    { user_id: "create-preview-1", name: "Sera" },
+    { user_id: "create-preview-2", name: "John" },
+    { user_id: "create-preview-3", name: "Miya" },
+    { user_id: "create-preview-4", name: "Alex" },
+  ];
+  return (
+    <main className="create-room-page">
+      <header className="create-page-header">
+        <button className="auth-wordmark dark" onClick={onBack}>
+          <span className="brand-icon">
+            <Radio size={21} />
+          </span>
+          missed<span>connection</span>
+          <b>.</b>
+        </button>
+        <div className="create-account">
+          <span>ORGANIZER</span>
+          <b>{email}</b>
+        </div>
+      </header>
+      <div className="create-page-content">
+        <section className="create-room-form-section">
+          <button className="auth-back inline" onClick={onBack}>
+            <ArrowLeft size={16} /> Back to event rooms
+          </button>
+          <div className="dialog-eyebrow">HOST SOMETHING GOOD</div>
+          <h1>Create your event room.</h1>
+          <p className="create-lead">
+            Give your room a name and one obvious place where matched attendees
+            can find each other.
+          </p>
+          <form onSubmit={onSubmit} className="create-room-form">
+            <label>
+              Event name
+              <input
+                required
+                autoFocus
+                aria-label="Event name"
+                maxLength={100}
+                placeholder="Claude × Supabase Singapore"
+                value={draft.name}
+                onChange={(e) => onChange({ ...draft, name: e.target.value })}
+              />
+              <small>
+                This appears on the QR invitation and attendee room.
+              </small>
+            </label>
+            <label>
+              Where should people meet?
+              <div className="input-with-icon">
+                <MapPin size={17} />
+                <input
+                  required
+                  aria-label="Where should people meet?"
+                  maxLength={120}
+                  value={draft.meeting_point}
+                  onChange={(e) =>
+                    onChange({ ...draft, meeting_point: e.target.value })
+                  }
+                />
+              </div>
+              <small>
+                Keep it easy to spot: registration desk, main stage, café.
+              </small>
+            </label>
+            <div className="create-flow-summary">
+              <span>
+                <b>1</b>Create room
+              </span>
+              <i />
+              <span>
+                <b>2</b>Share QR
+              </span>
+              <i />
+              <span>
+                <b>3</b>Watch people join
+              </span>
+            </div>
+            <button className="primary create-room-cta" disabled={busy}>
+              {busy ? "Creating your room..." : "Create room & get QR code"}
+              <ArrowRight size={17} />
+            </button>
+          </form>
+        </section>
+        <aside className="create-room-preview">
+          <div className="preview-topline">
+            <span className="live-pulse" /> LIVE PREVIEW
+          </div>
+          <h2>{draft.name || "Your event room"}</h2>
+          <p>People will appear here as soon as they scan your QR code.</p>
+          <div className="preview-room-floor">
+            {previewPeople.map((person, index) => (
+              <div
+                className={`preview-person preview-person-${index + 1}`}
+                key={person.user_id}
+              >
+                <span>{person.name}</span>
+                <PixelAvatar person={person} />
+              </div>
+            ))}
+          </div>
+          <div className="preview-meeting-point">
+            <MapPin size={15} />
+            <span>Meeting point</span>
+            <b>{draft.meeting_point || "Registration desk"}</b>
+          </div>
+          <div className="preview-qr-hint">
+            <QrCode size={24} />
+            <span>
+              One room.
+              <br />
+              One QR code.
+            </span>
+          </div>
+        </aside>
+      </div>
+    </main>
   );
 }
 

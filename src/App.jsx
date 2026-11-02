@@ -31,10 +31,15 @@ import {
   Inbox,
   ContactExchangeForm,
   MeetingInviteForm,
+  HostAuthPage,
+  HostCreatePage,
   BLANK,
 } from "./views";
 
-const initialCode = new URLSearchParams(location.search).get("room") || "";
+const initialParams = new URLSearchParams(location.search);
+const initialCode = initialParams.get("room") || "";
+const initialAuth = initialParams.get("auth") === "host" ? "host" : null;
+const initialCreate = initialParams.get("create") === "room";
 const fields = (m) =>
   Object.fromEntries(Object.keys(BLANK).map((k) => [k, m[k] ?? BLANK[k]]));
 
@@ -42,7 +47,7 @@ export default function App() {
   const [user, setUser] = useState(null),
     [ready, setReady] = useState(false),
     [gate, setGate] = useState(null),
-    [authFor, setAuthFor] = useState(null);
+    [authFor, setAuthFor] = useState(initialAuth);
   const [room, setRoom] = useState(null),
     [members, setMembers] = useState([]),
     [intros, setIntros] = useState([]),
@@ -53,7 +58,7 @@ export default function App() {
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [notice, setNotice] = useState("");
-  const [create, setCreate] = useState(false),
+  const [create, setCreate] = useState(initialCreate),
     [editing, setEditing] = useState(false),
     [joining, setJoining] = useState(false),
     [invite, setInvite] = useState(false),
@@ -90,6 +95,21 @@ export default function App() {
   useEffect(() => {
     if (ready && initialCode) run(() => open(initialCode));
   }, [ready]);
+  useEffect(() => {
+    if (!ready || !create || isAccount) return;
+    setCreate(false);
+    setAuthFor("host");
+    history.replaceState({}, "", `${location.pathname}?auth=host`);
+  }, [ready, create, isAccount]);
+  useEffect(() => {
+    const syncPage = () => {
+      const params = new URLSearchParams(location.search);
+      setAuthFor(params.get("auth") === "host" ? "host" : null);
+      setCreate(params.get("create") === "room");
+    };
+    window.addEventListener("popstate", syncPage);
+    return () => window.removeEventListener("popstate", syncPage);
+  }, []);
   useEffect(() => {
     if (!notice) return;
     const timer = setTimeout(() => setNotice(""), 6000);
@@ -210,7 +230,10 @@ export default function App() {
       setUser(u);
       setAuthFor(null);
       if (gate) await enter(gate, u);
-      else if (target === "host") setCreate(true);
+      else if (target === "host") {
+        setCreate(true);
+        history.replaceState({}, "", `${location.pathname}?create=room`);
+      } else history.replaceState({}, "", location.pathname);
     });
   }
   async function joinAsGuest(profile) {
@@ -506,8 +529,13 @@ export default function App() {
     setGate(null);
   }
   function startHosting() {
-    if (isAccount) setCreate(true);
-    else setAuthFor("host");
+    if (isAccount) {
+      setCreate(true);
+      history.pushState({}, "", `${location.pathname}?create=room`);
+    } else {
+      setAuthFor("host");
+      history.pushState({}, "", `${location.pathname}?auth=host`);
+    }
   }
   const joinUrl = room
     ? `${location.origin}${location.pathname}?room=${encodeURIComponent(room.code)}`
@@ -530,6 +558,41 @@ export default function App() {
             : contactExchange.sender_id),
       )
     : null;
+  if (authFor === "host") {
+    return (
+      <HostAuthPage
+        onSubmit={authenticate}
+        onBack={() => {
+          setAuthFor(null);
+          setError("");
+          history.replaceState({}, "", location.pathname);
+        }}
+        busy={busy}
+        error={error}
+      />
+    );
+  }
+  if (create && isAccount) {
+    return (
+      <HostCreatePage
+        draft={draft}
+        onChange={setDraft}
+        onSubmit={(event) => {
+          event.preventDefault();
+          run(async () => {
+            await enter(await api.createRoom(draft, uid));
+            setInvite(true);
+          });
+        }}
+        onBack={() => {
+          setCreate(false);
+          history.replaceState({}, "", location.pathname);
+        }}
+        busy={busy}
+        email={user.email}
+      />
+    );
+  }
   return (
     <div className={"room-app" + (room ? "" : " is-landing")}>
       <header className="room-header">
