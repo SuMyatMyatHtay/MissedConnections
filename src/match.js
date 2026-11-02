@@ -57,7 +57,7 @@ export function scoreMatch(a,b){
  const fit=hire?(ia==='hiring'?toMe.value:toThem.value):0;
  const skill=.65*Math.max(toMe.value,toThem.value)+.35*Math.min(toMe.value,toThem.value);
  const sharedSkills=aSkills.filter(x=>bSkills.some(y=>strength(x,y)===1));
- const bWords=words(b),overlap=[...words(a)].filter(w=>bWords.has(w)).length;
+ const bWords=words(b),sharedWords=[...words(a)].filter(w=>bWords.has(w)),overlap=sharedWords.length;
  const sameCompany=a.company&&b.company&&norm(a.company)===norm(b.company);
  const score=Math.round(Math.max(10,Math.min(98,25+38*skill+14*affinity+20*fit+6*Math.min(1,sharedSkills.length/2)+6*Math.min(1,overlap/3)-(sameCompany?15:0))));
 
@@ -67,11 +67,11 @@ export function scoreMatch(a,b){
  if(hire&&ia==='hiring'){
   label=fit>0?'Hiring match':'Open to work';
   why=theyHelp.length?`${b.name}${at} is open to work and brings ${theyHelp.join(', ')}, which is what you’re hiring for.`:`${b.name}${at} is open to work. Their skills don’t match your search exactly, but it’s worth a chat.`;
-  icebreaker=theyHelp.length?`Ask ${first(b.name)} what kind of role they want next and what they’ve built with ${theyHelp[0]}.`:`Ask ${first(b.name)} what kind of role they’re looking for next.`;
+  icebreaker=theyHelp.length?`I’m hiring for ${unique(toMe.hits.map(h=>h.want))[0]}. What kind of role are you after, and what have you built in ${theyHelp[0]}?`:'What kind of role are you looking for next?';
  }else if(hire){
   label=fit>0?'Job opportunity':'Hiring now';
   why=youHelp.length?`${b.name}${at} is hiring for ${youHelp.join(', ')}, skills you have.`:`${b.name}${at} is hiring, though not for your listed skills yet.`;
-  icebreaker=youHelp.length?`Ask ${first(b.name)} what their team needs most in a ${youHelp[0]} hire.`:`Ask ${first(b.name)} which roles ${b.company||'they'} are hiring for.`;
+  icebreaker=youHelp.length?`I work with ${youHelp[0]}. What does your team need most in a ${youHelp[0]} hire?`:`Which roles is ${b.company||'your team'} hiring for right now?`;
  }else{
   label=theyHelp.length&&youHelp.length?'You can help each other':theyHelp.length||youHelp.length?'A useful connection':'A new perspective';
   if(theyHelp.length)why=`${b.name} has ${theyHelp.join(', ')} skills you’re looking for.`;
@@ -79,7 +79,11 @@ export function scoreMatch(a,b){
   else if(sharedSkills.length)why=`You both work with ${unique(sharedSkills).join(', ')}.`;
   else why='You might bring different perspectives to each other’s work.';
   if(theyHelp.length&&youHelp.length)why+=` You can help them with ${youHelp.join(', ')}.`;
-  icebreaker=theyHelp.length?`How have you used ${theyHelp[0]} in your projects?`
+  // One speakable opener, from the strongest shared ground down to a generic question.
+  icebreaker=theyHelp.length?`I’m looking for ${unique(toMe.hits.map(h=>h.want))[0]} help. Where have you used ${theyHelp[0]} in your work?`
+   :youHelp.length?`I hear you’re after ${youHelp[0]}. That’s my thing. What are you trying to build?`
+   :sharedSkills.length?`We both work with ${unique(sharedSkills)[0]}. What are you building with it?`
+   :sharedWords.length?`We both seem to care about “${sharedWords[0]}”. What’s your angle on it?`
    :b.project?`I heard you’re working on “${b.project}”. How did that start?`
    :b.company?`What’s the most interesting thing happening at ${b.company} right now?`
    :'What brought you to this event?';

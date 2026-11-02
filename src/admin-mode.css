@@ -1,0 +1,22 @@
+.admin-mode > .back,
+.admin-mode > .room-title-row {
+  display: none;
+}
+
+.admin-mode .organizer-dashboard {
+  margin-top: 0;
+}
+
+.people-floor > .room-person:only-child .pixel-avatar {
+  width: 132px;
+  height: 166px;
+}
+
+.people-floor > .room-person:only-child .floating-name {
+  min-width: 155px;
+  padding: 11px 16px;
+}
+
+.people-floor > .room-person:only-child .floating-name strong {
+  font-size: 18px;
+}

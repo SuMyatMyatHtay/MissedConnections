@@ -11,3 +11,5 @@
 .chip.status-accepted,.chip.status-met{background:#e9f7f0;color:#26836b}.chip.status-declined{background:#fdecef;color:#b3445a}.chip.status-pending{background:#fff1e0;color:#b36a14}
 .room-title-row+.room-tabs{margin-top:22px}
 @media(max-width:730px){.intent-picker{grid-template-columns:1fr}.header-right .who{display:none}.person-side{align-items:flex-start}}
+.match-reason{flex-wrap:wrap}.match-score{margin-left:auto;font-size:11px;font-weight:800;color:#7957c4;background:#ede7fd;border-radius:20px;padding:4px 10px}
+.talk-quote{margin:14px 0;padding:12px 14px;border-left:3px solid #9370de;background:#f6f3ff;border-radius:0 10px 10px 0;font-size:13px;line-height:1.6;color:#4b4560;font-style:italic}.talk-quote small{display:block;font-style:normal;font-size:9px;font-weight:800;letter-spacing:1.5px;color:#9370de;margin-bottom:4px}

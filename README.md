@@ -5,7 +5,9 @@ Event rooms that help people at networking events find the right person to talk 
 - **Organizers need an account.** They create a room, share its QR code, and get an admin view: everyone who joined (email, company, role, intent, skills), who invited whom and how it ended, and a CSV export.
 - **Participants don't need one.** Scanning the QR code opens a gate: *Log in or sign up* (profile pre-filled next time) or *Continue as guest*. People looking for work provide their target role instead of a company/current role; other attendees can add their company and role.
 - **Matching** ranks the room by intent first (hiring and looking for work rank highest, scored on how well the job seeker's skills cover what the hirer is searching for), then complementary and shared skills. Related skills count (React and Frontend), people at your own company rank lower, and each match gets a plain-language reason and a tailored icebreaker.
-- Accepted introductions show the meeting point and reveal each side's email; either participant can confirm they met.
+- Accepted introductions show the meeting point. Confirming “We met” requires sending a private contact card with a prefilled email, preferred contact mode, contact details, and an optional message.
+- The Inbox combines meeting requests and realtime “Contact me” cards, with an unread count on the tab.
+- Meeting requests can include a short note and up to six additional attendees, followed by a clear success screen that returns the sender to their dashboard.
 
 ## Local development
 
@@ -30,7 +32,7 @@ VITE_ENABLE_SEMANTIC_MATCHING=false
 
 4. Restart the dev server. Create a room, introduce yourself, and open its invitation in an incognito browser to test a second participant.
 
-Guest sessions belong to a browser. Clearing its data or changing devices loses access to that guest identity; accounts work on any device. Only non-anonymous accounts can create rooms (enforced by row-level security, not just the UI). Emails live in `member_contacts`, readable only by their owner, the room organizer, and the other side of an accepted introduction. Room codes act as invitations; only share them with intended participants. Participants explicitly consent to discovery and can hide their profile or mark themselves unavailable. Only introduction participants and the room owner can read introductions; the organizer can see room metrics and profiles for their room.
+Guest sessions belong to a browser. Clearing its data or changing devices loses access to that guest identity; accounts work on any device. Only non-anonymous accounts can create rooms (enforced by row-level security, not just the UI). Emails live in `member_contacts`, readable only by their owner, the room organizer, and the other side of an accepted introduction. Contact cards live in `contact_cards` and are readable only by their sender and recipient. Room codes act as invitations; only share them with intended participants. Participants explicitly consent to discovery and can hide their profile or mark themselves unavailable. Only introduction participants and the room owner can read introductions; the organizer can see room metrics and profiles for their room.
 
 Before a large event, review Supabase Auth’s anonymous sign-in rate limit: many attendees may share the venue’s public IP. Enable appropriate CAPTCHA protection before broader public promotion.
 
