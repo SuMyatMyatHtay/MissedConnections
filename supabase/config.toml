@@ -1,0 +1,2 @@
+[functions.match-room]
+verify_jwt = true
